@@ -4,13 +4,6 @@
 read -p 'EFI partition( e.g. /dev/sda1): ' efipart
 read -p 'swap partition( e.g. /dev/sda3 or /dev/mapper/vg0-swap): ' swappart
 read -p 'root partition( e.g. /dev/sda2 or /dev/mapper/vg0-root): ' rootpart
-read -p 'If using LVM on LUKS enter volume group name): ' vgname
-if [ "$vgname" != '' ]
-then
-	read -p 'And crypt device(e.g. /dev/sda2):' cryptdev
-fi
-read -p 'Hostname: ' hostname
-
 
 mkfs.ext4 -L root $rootpart
 mkswap $swappart
