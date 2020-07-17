@@ -15,9 +15,10 @@ hwclock --systohc --utc
 
 echo $hostname > /etc/hostname
 sed -i -e 's/#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/g' /etc/locale.gen
-sed -i -e 's/#en_DK.UTF-8.UTF-8 UTF-8/en_DK.UTF-8.UTF-8 UTF-8/g' /etc/locale.gen
+sed -i -e 's/#en_DK.UTF-8 UTF-8/en_DK.UTF-8 UTF-8/g' /etc/locale.gen
 locale-gen
 localectl --no-convert set-keymap de-latin1-nodeadkeys
+localectl set-locale LANG=en_DK.UTF-8
 echo KEYMAP=de-latin1-nodeadkeys > /etc/vconsole.conf
 
 sed -i -e 's/MODULES=()/MODULES=(ext4)/g' /etc/mkinitcpio.conf
@@ -27,8 +28,7 @@ sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
 if ["$vgname" != ""]
 then
-	sed 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="cryptdevice=$cryptdev:$vgname root=$rootpart"/g' /etc/default/grub
-	pwd
+	sed -i -e "s|GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=$cryptdev:$vgname\"|g" /etc/default/grub
 fi
 
 mkinitcpio -P
