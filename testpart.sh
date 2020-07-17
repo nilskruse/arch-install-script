@@ -22,3 +22,11 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk $1
   p # print the in-memory partition table
   w # write the partition table
 EOF
+
+
+cryptsetup luksFormat "${1}2"
+cryptsetup open "${1}2" luks
+
+vgcreate vg0 /dev/mapper/luks
+lvcreate -L 2G vg0 -n swap
+lvcreate -l 100%FREE vg0 -n root
