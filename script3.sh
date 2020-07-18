@@ -26,7 +26,7 @@ sed -i -e 's/HOOKS=.*/HOOKS=(base udev autodetect modconf block keyboard keymap 
 
 sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
-if ["$vgname" != ""]
+if [ "$vgname" != '' ]
 then
 	sed -i -e "s|GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=$cryptdev:$vgname\"|g" /etc/default/grub
 fi
