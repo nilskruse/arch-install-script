@@ -16,6 +16,7 @@ hwclock --systohc --utc
 echo $hostname > /etc/hostname
 sed -i -e 's/#de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/g' /etc/locale.gen
 sed -i -e 's/#en_DK.UTF-8 UTF-8/en_DK.UTF-8 UTF-8/g' /etc/locale.gen
+sed -i -e 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
 locale-gen
 localectl --no-convert set-keymap de-latin1-nodeadkeys
 localectl set-locale LANG=en_DK.UTF-8
@@ -39,9 +40,11 @@ echo 'Set root password'
 passwd
 
 read -p "Enter username: " name
-useradd -m -s /bin/zsh $name
+
+groupadd $name
+useradd -m -g $name -G wheel,storage,power,network,uucp -s /bin/zsh $name
+passwd $name
 echo "Set password for $name"
 passwd $name
 
-usermod -aG wheel,audio,video,optical,storage,network,uucp $name
-systemctl enable --now NetworkManager
+systemctl enable NetworkManager
